@@ -100,7 +100,7 @@ As an alternative, which we recommend, you can create a Jekyll site [**using the
 
 ### Fork on GitHub
 
-[Fork **Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork) on GitHub and then clone your fork to local. (Please note that the default branch code is in development.  If you want the blog to be stable, please switch to the [latest tag](https://github.com/cotes2020/jekyll-theme-chirpy/tags) and start writing.)
+[Fork **Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork) on GitHub and then clone your fork to local. (Please note that the default branch code is in development. If you want the blog to be stable, please switch to the [latest tag](https://github.com/cotes2020/jekyll-theme-chirpy/tags) and start writing.)
 
 Install gem dependencies by:
 
@@ -119,9 +119,10 @@ $ bash tools/init.sh
 What it does is:
 
 1. Remove some files or directories from your repository:
-    - `.travis.yml`
-    - files under `_posts`
-    - folder `docs`
+
+   - `.travis.yml`
+   - files under `_posts`
+   - folder `docs`
 
 2. If you use the `--no-gh` option, the directory `.github` will be deleted. Otherwise, setup the GitHub Action workflow by removing the extension `.hook` of `.github/workflows/pages-deploy.yml.hook`, and then remove the other files and directories in the folder `.github`.
 
@@ -186,7 +187,7 @@ Now publish your Jekyll site by:
 
 2. Browse to your repo's landing page on GitHub and select the branch `gh-pages` as the [publishing source](https://docs.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) through _Settings_ → _Options_ → _GitHub Pages_:
 
-    ![gh-pages-sources](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190809/gh-pages-sources.png)
+   ![gh-pages-sources](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190809/gh-pages-sources.png)
 
 3. Visit your website at the address indicated by GitHub.
 
@@ -248,3 +249,5 @@ This work is published under [MIT](https://github.com/cotes2020/jekyll-theme-chi
 
 [jb]: https://www.jetbrains.com/?from=jekyll-theme-chirpy
 [cn-donation]: https://cotes.gitee.io/alipay-wechat-donation/
+
+[test]
