@@ -4,5 +4,6 @@ icon: fas fa-info
 order: 4
 ---
 
+> **Tech Stack**: 관심있고 공부 중인 기술 스택은 `React, Redux-toolkit, Redux-saga, NestJs` 입니다.
 
-> **Note**: Add Markdown syntax content to file `_tabs/about.md` and it will show up on this page.
+<!-- **Tech Stack**: 관심있고 공부 중인 기술 스택은 `React, Redux-toolkit, Redux-saga, NestJs` 입니다. -->

@@ -4,7 +4,7 @@
 
 .pagination {
   color: var(--btn-patinator-text-color);
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 
   a:hover {
     text-decoration: none;
@@ -47,7 +47,6 @@
       border-radius: 50%;
     }
   } // .page-item
-
 } // .pagination
 
 #post-list {
@@ -102,9 +101,7 @@
         display: none;
       }
     }
-
   } // .post-preview
-
 } // #post-list
 
 /* Hide SideBar and TOC */
@@ -116,15 +113,12 @@
       &:not(:first-child):not(:last-child) {
         display: none;
       }
-
     }
-
   }
 }
 
 /* Sidebar is visible */
 @media all and (min-width: 831px) {
-
   #post-list {
     margin-top: 1.5rem;
     .post-preview .post-meta {
@@ -156,15 +150,12 @@
         width: 2rem;
         height: 2rem;
       }
-
     }
 
     .page-index {
       display: none;
     }
-
   } // .pagination
-
 }
 
 /* Pannel hidden */
