@@ -1,6 +1,6 @@
 ---
 title: Nest js 로 유저단 만들기[0]
-author: Cotes Chung
+author: Sanghun lee
 date: 2021-09-08 11:33:00 +0800
 categories: [Blogging, NestJs]
 tags: [NestJs]
