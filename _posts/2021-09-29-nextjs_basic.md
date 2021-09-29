@@ -72,12 +72,10 @@ Next js에서는 아래 두 컨셉을 페이지별로 필요에따라 마음대�
 
 - 각 요청마다 새로운 HTML을 생성해준다
 - 별도 설정없이은 CDN캐시가 되지 않고 매 요청마다 서버에서 새로 계산을 해야하므로 시간이 `getStaticProps`에 비해 더 걸리게 된다.
-- 유저의 요청으로 많은 변화가 생기는 경우
-
-  - 매 요청(request)마다 데이터가 변경되어야 하는 경우
-
 - 매 요청에(request time)에 데이터를 가져와야 하는경우(빌드타임이아닌고 렌더 되기 전에 이미 완성이 되어있어야 하는 경우) `getServerSideProps` 를 사용하면 된다.
   > When you need to fetch data at request time instead of build time
+
+> You should use getServerSideProps only if you need to pre-render a page whose data must be fetched at request time. Time to first byte (TTFB) will be slower than getStaticProps because the server must compute the result on every request, and the result cannot be cached by a CDN without extra configuration.
 
 ## 1.2.3 Client-side Rendering
 
@@ -171,17 +169,88 @@ export default Home;
 
 > getStaticProps 예시
 
+## 2.2 Server-side Rendering
+
+```tsx
+import axios, { AxiosResponse } from "axios";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import Link from "next/link";
+import Layout from "../../components/layout";
+import utilStyles from "../../styles/utils.module.css";
+
+interface DataTest {
+  date: string;
+  title: string;
+  content: string;
+}
+interface TestData {
+  data: DataTest[];
+}
+
+const FirstPost = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  return (
+    <Layout home={false}>
+      <Head>
+        <title>First Post!</title>
+      </Head>
+      <h1>First Post!</h1>
+      <h2>
+        <Link href="/">
+          <a> Back to HOme</a>
+        </Link>
+      </h2>
+      <section className={utilStyles.headingMd}>
+        <ul>
+          {data?.map((el: DataTest) => (
+            <li key={el.date}>
+              {el.date} <br />
+              {el.title} <br />
+              {el.content}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Layout>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const res: AxiosResponse<{ data: TestData }> = await axios.get(
+    "http://localhost:4000/images/test"
+  );
+  const data = res.data.data;
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { data },
+  };
+};
+
+export default FirstPost;
+```
+
 # 3. 결론
 
-커스텀엘리먼트를 만들기 위해 다시한번 DOM, Node, VirtualDOM에 대해 많이 찾아보게 된 것 같다.
-기존에 회사의 모든 프로젝트들이 SPA로 되어있어 웹팩을 해야지 해야지.. 하던 생각이 있었는데 좋은기회에 기본적인 것을 공부할 수 있게되어 개인적으로는 매우 보람차다!
+기본적으로 필요한 CSS, REST-API 받는방식 및 관련 개념을 정리해보았다.
 
-아무쪼록 회사 내부의 사정이 잘 해결되어 커스텀엘리먼츠를 더욱 활용하며 조금 더 깊은 공부를 할 수 있는 기회가 많아지면 좋겠다 :)
+SWR같은경우는 세팅을하고 컴포넌트를 작성하면서 다시한번 샘플을 해당 포스팅에 남겨보아야겠다.
+
+이제 다음편에 해야할 것은 [이 링크](https://github.com/vercel/next.js/tree/canary/examples)를 통해 apollo-client를 연결하여
+
+graphql/ apollo/ apollo-client을 세팅하는 방법을 공부하며 포스팅해보겠다
 
 ## 참고
 
 - [Fetching Data at Request Time](https://nextjs.org/learn/basics/data-fetching/request-time)
 - [getStaticProps Details](https://nextjs.org/learn/basics/data-fetching/getstaticprops-details)
-- [codepen-BradDenver](https://codepen.io/BradDenver/pen/ALrXaW?editors=1010)
-- [BSIDESOFT co. - [js] Array.prototype 사용하기](https://www.bsidesoft.com/323)
-- [제로초님 블로그-객체의 복사](https://www.zerocho.com/category/JavaScript/post/5750d384b73ae5152792188d)
