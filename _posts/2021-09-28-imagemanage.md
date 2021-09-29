@@ -1,5 +1,5 @@
 ---
-title: Nest JS와 S3로 에디터에 등록되는 이미지 관리하기[1편]
+title: Nest JS와 S3로 에디터에 등록되는 이미지 관리하기[1편] (작성 중..)
 author: Sanghun lee
 date: 2021-09-28 11:33:00 +0800
 categories: [Blogging, Nestjs, AWS]
@@ -34,151 +34,65 @@ postId null값인 애들을 db에서 삭제
 
 # 2. 방식
 
-일단 기본적으로 React는 가상의돔인 ReactDOM을 사용하고 기존 ReactDOM.render()메서드는 지정된 node엘리먼트에 번들링 된 결과물을 연결하게 되는 방식이다.
-그래서 기존의 render메서드를 좀 손볼 필요가 있어 여러 자료들을 서치하였다.
+S3와 FileIneterceptor 데코레이터를 활용하여 별도의 Controller 구성 및 데이터베이스를 실제로 수정해주어야 하는부분은 별도로 service에서 처리하였다.
 
-좋은 샘플을 발견하였고 구체적인 작동방식 설명이전에 간단한 설명을 크게 세가지 단계로 나뉘어서 이야기할 수 있다.
+크게 업로드에 두가지 유형이 있다.
 
-1. 사용할 커스텀태그를 새롭게 document에 만든다
-2. ReactDOM.render메서드를 활용해 루트컴포넌트를 document에 새로만든 커스텀태그에 가상돔으로 렌더시킨다.
-3. 외부 html의 script에서 React에 미리 선언된 이벤트를 사용하고 콜백함수로 덮어씌울 수 있어야하므로 dispatchEvent를 사용하였다.
+1. 유저의 프로필 사진, 브랜드의 배경& 프로필 사진과 같이 삭제를하고 등록을 하는 단일성 파일의 경우 DB에 굳이 등록되지않고 유저 컬럼내에서 관리해도 될거라 판단되었다.
+   아래와 같은 방식으로 진행하였다.
 
-## 2.1 1단계
+- 등록과 동시에 s3에 집어넣고 프론트에서 저장버튼 클릭 시 해당 링크를 가지고 DB에 해당 컬럼에 가지고 있는 방식
+- 재등록 또는 수정의 경우 선삭제가 이루어지도록 만들어 삭제버튼 클릭시 해당 링크에서 objectName을 도출하여 DB에서 삭제와 동시에 S3에서 삭제처리
 
-1. CompProps는 컴포넌트가 가지게 될 props이다
-2. document.createElement를 통해 document에 tag이름을 가진 커스텀엘리먼트를 미리 만들어둔다
-3. 기존 컴포넌트에서 사용하는 react portal을 위해 modal이라는 id를 가진 div도 만들어준다.
-4. nodes라는 변수에 커스텀엘리먼트로 만든(여러번 선언할 수도 있으니까)태그를 가져와서 배열에 담아준다.
+2.  프론트에서 Tui 에디터에 해당 포스트에 들어가는 사진들은 업로드와 동시에 미리 S3에 등록이 되고 Nest JS로 구현된 서버의 Image 테이블에 postId가 null값을 등록이 된다.
 
-- 이어서 2단계!
+- 포스트를 등록하는 순간 해당포스트의 contents내에서 정규표현식을 통해 해당링크들을 긁어오는 배열을 만들고 Image 테이블에서 해당하는 링크를 찾아 post와 관계를 만들어준다.
+- 만약 포스트 업로드중 중도 나가는 경우와 매칭되지 않는 사진의 경우 postId는 null값으로 존재하게 되므로 이는 CRON을 통해 매 새벽마다 지워주는 방식을 택했다.
 
-```typescript
-// custom tags
-function render(tag: string, Comp: React.FC<CompProps>) {
-  document.createElement(tag);
-  //for modal
-  const modal = document.createElement("div");
-  modal.setAttribute("id", "modal");
-  document.body.appendChild(modal);
-  //
+```ts
+@Post('')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: any) {
+    AWS.config.update({
+      credentials: {
+        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+      },
+    });
 
-  const nodes: Element[] = Array.from(document.getElementsByTagName(tag));
-  nodes.map((node, i) => renderNode(tag, Comp, node, i));
+    try {
+      //아래는 버킷생성을 위한 코드이므로 한번 사용 후 주석처리
+      // const upload = await new AWS.S3()
+      //   .createBucket({
+      //     Bucket: BUCKET_NAME,
+      //   })
+      //   .promise();
+      const objectName = `${uuidv4() + file.originalname}`;
+      await new AWS.S3()
+        .putObject({
+          Body: file?.buffer, //파일 내용임
+          Bucket: BUCKET_NAME,
+          Key: objectName, //파일 이름으로 설정(unique를 위함)
+          ACL: 'public-read', //권한변경 설정으로 기본적으로 access denied가 되기에 설정 필요
+        })
+        .promise();
 
-  return Comp;
-}
-
-render("test-home", App);
-```
-
-## 2.2 2단계
-
-1. Array.prototype.slice.call()을 이용하여 node.attributes에 존재하는 객체{key:value}들의 을 카피한 배열로 반환해준다.(이렇게하면 얕은복사가 진행되므로 node에 직접 추가가 가능 해진다.)
-2. 커스텀앨리먼츠에 선언한 props를 리액트에서 활용하기 위해 props라는 변수에 임의로 {key:value}에 해당하는 것을 선언해주고 node.attributes의 속성으로부터 props로 선언한 값을 가져온다.
-3. 커스텀엘리먼츠가 class이름으로 받은 이름을 리액트에서 className으로 사용하기 위해 처리를 별도로 해준다.
-4. 가상돔에 해당 컴포넌트와 props를 렌더하고 1단계에서 만든 커스텀엘리먼트에 렌더가 된다.
-
-- 여기까지하면 커스텀이벤츠는 사용하지 않고 엘리먼트로 필요한 컴포넌트를 렌더할 수 있게된다.
-
-```typescript
-interface IAttrs {
-  [key: string]: string;
-}
-
-interface IProps extends CompProps {
-  [key: string]: string | undefined;
-}
-
-function renderNode(
-  tag: string,
-  Comp: React.FC<CompProps>,
-  node: Element,
-  i: number
-) {
-  let attrs: IAttrs[] = Array.prototype.slice.call(node.attributes);
-  let props: IProps = {
-    key: `${tag}-${i}`,
-  };
-
-  attrs.map((attr) => {
-    return (props[attr.name] = attr.value);
-  });
-
-  if (!!props.class) {
-    props.className = props.class;
-    delete props.class;
+      //db에 Obj이름을 넣으면 삭제시 더 간단해질 것 같은데 용량이 걱정..
+      const url = `https://${BUCKET_NAME}.s3.amazonaws.com/${objectName}`;
+      this.imageService.savePostImage({
+        link: url,
+      });
+      return { url };
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 
-  ReactDOM.render(<Comp {...props} />, node);
-}
-```
-
-## 2.2 3단계
-
-이제 커스텀한 이벤트를 외부에서 필요한 로직으로 활용할 수 있게만 만들어주면 된다.
-
-1. js에서 지원하는 CustomeEvent 클래스를 활용해 컴포넌트 내부에서 미리 선언해주고
-2. 커스텀이벤트에서 props로 받을 id에 해당 이벤트를 걸어준다
-3. dispatchEvent 메서드를 활용하여 해당 커스텀 이벤트를 컴포넌트 내부에서 필요한 부분에 실행해준다.
-4. 외부 html에서 해당 이벤트에 eventListener를 걸고 콜백함수로 필요한 로직을 실행하면 된다.
-   아래는 컴포넌트에서 선언하여 필요한곳에 배치한 코드이다.
-
-```jsx
-import React from "react";
-import { HomeCompProps } from "../../model/types";
-import "../../styles/sass.scss";
-
-const Home: React.FC<HomeCompProps> = (props) => {
-  const wrapper = document.getElementById(props["id"]);
-  const newCustomEvent = new CustomEvent("onOpen");
-
-  const openModal = () => {
-    wrapper?.dispatchEvent(newCustomEvent);
-    console.log(props["id"]);
-  };
-
-  return (
-    <div className="testWrapper">
-      <section>
-        <img
-          onClick={openModal}
-          className="img-home"
-          src="https://"
-          alt="home-file-loader"
-        />
-      </section>
-    </div>
-  );
-};
-
-export default Home;
-```
-
-아래는 외부 html에서 필요한 로직을 콜백으로 구현한 것이다.
-
-```html
-<body>
-  <test-home id="test" user-id="test"></test-home>
-
-  <script src="https://s3.blahblah.test.js"></script>
-  <script type="text/javascript" defer>
-    const dtime = document.getElementById("dtime");
-    dtime.addEventListener("onOpen", () => alert("index.html script alert")); // 기존 onOpen 실행 event 그대로 유지
-  </script>
-</body>
 ```
 
 # 3. 결론
 
-커스텀엘리먼트를 만들기 위해 다시한번 DOM, Node, VirtualDOM에 대해 많이 찾아보게 된 것 같다.
-기존에 회사의 모든 프로젝트들이 SPA로 되어있어 웹팩을 해야지 해야지.. 하던 생각이 있었는데 좋은기회에 기본적인 것을 공부할 수 있게되어 개인적으로는 매우 보람차다!
-
-아무쪼록 회사 내부의 사정이 잘 해결되어 커스텀엘리먼츠를 더욱 활용하며 조금 더 깊은 공부를 할 수 있는 기회가 많아지면 좋겠다 :)
+conclusion
 
 ## 참고
-
-- [Talk to your React components with custom events](https://www.falldowngoboone.com/blog/talk-to-your-react-components-with-custom-events/)
-- [github issue-dispatchEvent customEvent of web components not working](https://github.com/facebook/react/issues/15830)
-- [codepen-BradDenver](https://codepen.io/BradDenver/pen/ALrXaW?editors=1010)
-- [BSIDESOFT co. - [js] Array.prototype 사용하기](https://www.bsidesoft.com/323)
-- [제로초님 블로그-객체의 복사](https://www.zerocho.com/category/JavaScript/post/5750d384b73ae5152792188d)
