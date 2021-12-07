@@ -1,7 +1,7 @@
 ---
 title: Resume
-icon: fas fa-info
-order: 4
+icon: fas fa-resume
+order: 1
 ---
 
 ## <span style="color:#88B19C">**이상훈**</span>
@@ -27,13 +27,13 @@ UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 �
 
 ## <span style="color:#88B19C"> **Experienced Skills**</span>
 
-###### **현업에서 사용한 것들은 Bold 처리 되어 있습니다.**
+###### **현업에서 사용한 경험이 있는 것들은 Bold 처리 되어 있습니다.**
 
 <hr>
 
 ### Front-End
 
-- **React JS**, Next Js, Vue js, Redux, **Redux-Toolkit**, **Redux-Saga**, **Cypress**, **Jest**, **msw**, Apollo Client, , **TypeScript**
+- **React JS**, Next Js, Vue js, Redux, **Redux-Toolkit**, **Redux-Saga**, Apollo Client , **Cypress**, **Jest**, **msw**,**TypeScript**
 
 ### Back-End
 
