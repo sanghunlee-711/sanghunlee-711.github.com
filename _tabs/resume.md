@@ -1,6 +1,6 @@
 ---
 title: Resume
-icon: fas fa-resume
+icon: fas fa-file
 order: 1
 ---
 
@@ -39,13 +39,13 @@ order: 1
 
 ### Front-End
 
-- **React JS**, Next Js, Vue js,
+- **React JS**, Next JS, Vue JS,
 - Redux, **Redux-Toolkit**, **Redux-Saga**, **React-Query**,Apollo Client
 - **Cypress**, **Jest**
 
 ### Back-End
 
-- Express.js, Nest js
+- Express JS, Nest JS
 - TypeORM
 - Postgresql, GraphQL
 
@@ -55,21 +55,41 @@ order: 1
 
 #### **디타임, FrontEnd developer, 2021.04~**
 
+`React JS`,`Redux-toolkit`,`Redux-saga`,`Jest`,`Cypress`
+
 - 인싸이트(디타임) 인사관리
+
   - 교보 생명과 협력하여 1,000여개의 고객사에서 사용할 수 있는 인사관리 웹서비스 개발 및 운영
   - 외부 주요고객(IBK 기업은행)을 위한<a target="_blank" href ="https://sanghunlee-711.github.io/posts/webpack/"> 커스텀 엘리먼트 제작</a>
-  - 새롭게 개선된 <a href="https://web.inssait.io/personnel-management?source=NONE" target="_blank"> 메인페이지</a>, 프론트엔드 결제모듈 도입 등 개발 참여
-  - 개발,유지 및 보수 개선을 위한 프로젝트 구조 변경 및 <a target="_blank" href="https://sanghunlee-711.github.io/posts/FETest/">테스트 코드 도입</a>
+
+    - 외부 고객인 IBK기업은행을 위해 제공하는 자사의 [간단한 계산기](https://web.inssait.io/employment-subsidy)를 커스텀 엘리먼트화 하여 하나의 모듈 파일로 제공
+    - React JS의 컴포넌트를 모듈화 함으로서 자사의 컴포넌트를 큰틀에서 고객사 등의 타 플랫폼을 통해 재활용 할 수 있게 됨.
+
+  - 노무구독 서비스 개발 참여
+
+    - 새롭게 개선된 <a href="https://web.inssait.io/personnel-management?source=NONE" target="_blank"> 메인페이지</a>, 프론트엔드 결제모듈 도입 등 개발 참여
+    - 백엔드와의 협업을 통한 다날 결제 모듈 연결
+
+  - 개발,유지 및 보수 개선을 위한 Redux saga도입, 프로젝트 구조 변경 및 <a target="_blank" href="https://sanghunlee-711.github.io/posts/FETest/">테스트 코드 도입</a>
+    - Props Drilling 및 개별 페이지 컴포넌트에 비동기함수 및 Util,
+      Constant가 무분별하게 존재하여 비동기함수 분리를 위한 Redux Saga도입 및 Constant와 Utils 함수의 분리를 건의 후 진행
+    - 각 페이지 폴더 내부에 Index, Saga, Slice(toolkit), Styles, Constant를 별도 구성하여 진행
+    - 추가 개발 시 형성된 패턴에 따라 일관성 있는 코드구조를 통해 개발 및 유지보수 효율 상승
+    - 패턴 변경과정 및 추가 리팩토링 과정에서 프로덕트 보장을 위한 Jest, Cypress 도입을 통해 개발 및 배포 시 제품 안정성 증대
 
 #### **다비수, Front-End developer, 2020.12~ 2021.03**
 
+`php`, `jquery`
+
 - 다비키즈
 
-  - PHP, jQuery로 구성된 백오피스 개발 및 유지보수 진행
+  - 백오피스 개발 및 유지보수 진행
 
 #### **브랜디, Front-End Internship, 2020.09 ~ 2020.10**
 
-- 4천개 이상의 입점 브랜드와 추가적 인플루언서의 제품 렌더를 위한 Vue js를 활용한 <a href="https://www.youtube.com/watch?v=oJ5L4m9CAvk&t=117s" target="_blank">프로덕트 웹 클론 개발</a>
+`Vue js`
+
+- 4천개 이상의 입점 브랜드와 추가적 인플루언서의 제품 렌더를 위한 <a href="https://www.youtube.com/watch?v=oJ5L4m9CAvk&t=117s" target="_blank">프로덕트 웹 클론 개발</a>
 
 #### **Veolia, Business Develop Team, 2019.11~ 2020.05**
 
@@ -86,11 +106,13 @@ order: 1
 
 #### The Folks
 
+`Next JS` ,`Nest JS`
+
 - 패션 커뮤니티로서 유저간 원하는 크루에 참여가 가능합니다.
 - 전문적인 글의 작성을 통해 선정된 인원들로 한해 크루 생성이 가능합니다.
 - 입점한 브랜드는 해당 크루들에게 연결 신청을 하여 유의미한 광고 효과를 낼 수 있는 기능을 가진 웹 서비스를 A-Z로 개발진행 중에 있습니다.
 - <a href ="http://www.the-folks.com/" target="_blank">The Folks-Beta</a>
-  - 테스트 코드 전체 작성 후 이메일 인증서비스를 사용할 예정입니다(현재 가입 후 인증 불가.)
+  - 테스트 코드 전체 작성 후 이메일 인증서비스를 사용할 예정입니다(현재 가입 후 인증 불가)
 
 ## <span style="color:#88B19C">**Education**</span>
 
