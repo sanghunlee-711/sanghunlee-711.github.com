@@ -16,14 +16,16 @@ order: 1
 
 <hr>
 
-반갑습니다. 활용을 통해 유용함을 만들어 내는 경험을 추구합니다.
+- 반갑습니다. 활용을 통해 유용함을 만들어 내는 경험을 추구합니다.
 
-자만심을 가지지 않고 항상 모르는 것들에 대한 경계심을 가지며 학습해 나아가기 위해 노력하는 프론트엔드 개발자 이상훈 입니다.
+* 자만심을 가지지 않고 항상 모르는 것들에 대한 경계심을 가지며 학습해 나아가기 위해 노력하는 프론트엔드 개발자 이상훈 입니다.
 
-프론트엔드 개발자는 웹 서비스 전반에 대한 이해와 구현력을 가지며
-UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 생각을 가지고 있습니다.
+* 프론트엔드 개발자는 웹 서비스 전반에 대한 이해와 구현력을 가지며
+  UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 생각을 가지고 있습니다.
 
-근본적인 지식을 중요시 여기며 가치있는 UI 및 의미있는 UX의 구현을 위해, 아직은 맞이하지 못한 기술과 개념을 무던하게 받아들이는 태도를 가진 개발자로 성장하기 위해 노력중입니다.
+- 근본적인 지식을 중요시 여기며 가치있는 UI 및 의미있는 UX의 구현을 위해 오늘도 공부합니다 :)
+
+- 아직은 맞이하지 못한 기술과 개념을 무던하게 받아들이는 태도를 가진 개발자로 성장하기 위해 노력중입니다.
 
 ## <span style="color:#88B19C"> **Experienced Skills**</span>
 
@@ -31,13 +33,21 @@ UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 �
 
 <hr>
 
+### Language
+
+- **JavaScript**, **TypeScript**
+
 ### Front-End
 
-- **React JS**, Next Js, Vue js, Redux, **Redux-Toolkit**, **Redux-Saga**, Apollo Client , **Cypress**, **Jest**, **msw**,**TypeScript**
+- **React JS**, Next Js, Vue js,
+- Redux, **Redux-Toolkit**, **Redux-Saga**, **React-Query**,Apollo Client
+- **Cypress**, **Jest**
 
 ### Back-End
 
-- Node.js, Postgresql, Nest js, GraphQL
+- Express.js, Nest js
+- TypeORM
+- Postgresql, GraphQL
 
 ## <span style="color:#88B19C">**Experiences**</span>
 
@@ -76,7 +86,11 @@ UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 �
 
 #### The Folks
 
-- 패션 커뮤니티로서 유저간 원하는 크루에 참여가 가능하며, 전문적인 글의 작성을 통해 선정된 인원들로 한해 크루 생성이 가능하며, 입점한 브랜드는 해당 크루들에게 연결 신청을 하여 유의미한 광고 효과를 낼 수 있는 기능을 가진 웹 서비스를 A-Z로 개발진행 중에 있습니다.
+- 패션 커뮤니티로서 유저간 원하는 크루에 참여가 가능합니다.
+- 전문적인 글의 작성을 통해 선정된 인원들로 한해 크루 생성이 가능합니다.
+- 입점한 브랜드는 해당 크루들에게 연결 신청을 하여 유의미한 광고 효과를 낼 수 있는 기능을 가진 웹 서비스를 A-Z로 개발진행 중에 있습니다.
+- <a href ="http://www.the-folks.com/" target="_blank">The Folks-Beta</a>
+  - 테스트 코드 전체 작성 후 이메일 인증서비스를 사용할 예정입니다(현재 가입 후 인증 불가.)
 
 ## <span style="color:#88B19C">**Education**</span>
 
@@ -87,6 +101,5 @@ UI,UX에 조금 더 중점을 두고 개발을 진행하는 포지션이라는 �
 
 ## <span style="color:#88B19C">**ETC**</span>
 
-- <a href="https://velog.io/@cloudlee711/%EB%81%9D%EC%9D%B4-%EC%95%84%EB%8B%8C-%EC%8B%9C%EC%9E%91%EC%9D%B4%EB%9D%BC%EB%8D%94%EB%9D%BC" target="_blank"> 개발을 시작하게 된 이유 [끝이 아닌 시작이라더라]</a>
-- <a href ="https://github.com/stylefolks" target="_blank">The Folks Repository [일정 시간 이후 Private으로 전환될 예정입니다.]</a>
-- <a href ="https://velog.io/@cloudlee711" target="_blank">개인 알고리즘 풀이 블로그</a>
+- <a href ="https://velog.io/@cloudlee711" target="_blank">알고리즘 풀이 블로그</a>
+- <a href ="https://sanghunlee-711.github.io/" target="_blank">개발 지식 정리 블로그</a>
