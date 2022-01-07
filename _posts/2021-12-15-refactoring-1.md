@@ -99,7 +99,7 @@ export default function FirstSection() {
       <FirstSectionWrapper>
         <HeaderTextWrapper>
           <AText color="black100" size={45} bold>
-            비즈니스로직으로
+            비즈니스로직으로{authPhase}
           </AText>
           <AText color="black100" size={45} bold>
             분리를 제발하자
@@ -121,35 +121,34 @@ export default function FirstSection() {
 
 그래서 위와 같은 코드를 아래와 같이 파일을 분리하여 개선하는 방향을 생각할 수 있다.
 
-컴포넌트만 놓고 보았을때, 일단 로직을 분리할 수 있게 되어 필요한 state나 actions만 Service에서 가져와 선언 또는 호출을 하면 된다.
+컴포넌트만 놓고 보았을때, 일단 로직을 분리할 수 있게 되어 필요한 state나 actions만 custom hooks에서 가져와 선언 또는 호출을 하면 된다.
 
 다만 이 상태에서 아쉬운 점은 뷰가 완전히 분리되었다고 볼 수 없는 상태이다.
 
-예를 들어 FirstSection이라는 컴포넌트가 테스트에 들어가게 된다면,
+예를 들어 FirstSection이라는 위에 하나의 파일로 작성된 파일을(뷰랑 컴포넌트 짬뽕) 테스트에 들어가게 된다면,
 
-`PersonnelManagementComponentsService`를 가지고와서 선언을 해준 뒤 테스트를 해줘야하는데
+`dispatch와 나머지 hook`를 가지고와서 선언을 해준 뒤 테스트를 해줘야하는데
 
 명확히 뷰의 역할만 하는 것이 아니라고 판단이 되기 때문이다.
 
-그래서 추후에 뷰는 Props로 필요한 로직들만 넘겨 처리하는 방식으로 진행하고 테스트에서는 이 Props를 유연하게 정해줄 수 있으므로 이를 활용할 생각이다.(아직까진..)
+그래서 추후에 뷰는 Props로 필요한 로직+state만 넘겨 처리하는 방식으로 진행하고 테스트에서는 이 Props를 유연하게
+만약 onApply가 console.log('Hello')만 실행하는 함수라도 뷰단에서의 올바름을 테스트한다는 가정만 하면 어떤 함수가 들어가도 해당 뷰를 클릭하면
+props로 전달받은 함수만 작동하는것을 테스트하면 되기때문에 그렇게 진행할 생각이다.(아직까진..)
+
+그래서 아래는 cutomhooks을 통해 파일마다 R&R을 정할 수 있게 일차원적으로 분리한 상태의 뷰 파일이다.
 
 ```tsx
 export default function FirstSection() {
-  const { actions, state } = PersonnelManagementComponentsService();
-
-  useEffect(() => {
-    if (localStorage.getItem('isPaused') === 'true') {
-      localStorage.removeItem('isPaused');
-      actions.onApply();
-    }
-  }, []);
+  const { actions, state } = usePersonnelManagementComponents();
+  const {onApply} = actions;
+  const {authPhase} = state;
 
   return (
     <>
       <FirstSectionWrapper>
         <HeaderTextWrapper>
           <AText color="black100" size={45} bold>
-            비즈니스로직으로
+            비즈니스로직으로{authPhase}
           </AText>
           <AText color="black100" size={45} bold>
             분리를 제발하자
@@ -159,7 +158,7 @@ export default function FirstSection() {
           <ABasicButton
           />
           <ABasicButton
-            onClick={actions.onApply}
+            onClick={onApply}
           />
         </FirstSectionButtonWrapper>
 
@@ -172,7 +171,7 @@ export default function FirstSection() {
 사실 그냥 복붙한 것과 같은 것이다(아직은 ..)
 
 ```ts
-const PersonnelManagementComponentsService = () => {
+const usePersonnelManagementComponents = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { authPhase, mainPopup, companyInfoData } = useRootState(
@@ -201,6 +200,13 @@ const PersonnelManagementComponentsService = () => {
     );
   };
 
+  useEffect(() => {
+    if (localStorage.getItem('isPaused') === 'true') {
+      localStorage.removeItem('isPaused');
+      actions.onApply();
+    }
+  }, []);
+
   return {
     state: {
       mainPopup,
@@ -213,7 +219,7 @@ const PersonnelManagementComponentsService = () => {
   };
 };
 
-export default PersonnelManagementComponentsService;
+export default usePersonnelManagementComponents;
 ```
 
 이렇게 컴포넌트 내부에 선언되었던 함수나 state를 다른 파일로 넘겨온 뒤 `state`, `actions` 로 별도 제공을 해주고
@@ -222,9 +228,24 @@ export default PersonnelManagementComponentsService;
 
 ### 문제점
 
-렌더링의 최적화 및 테스트 코드를 작성 후에 추가 작성을 해보자.
+1. 만약 하나의 파일이 굉장히 작은 비즈니스로직을 가지고 있다면 불필요하게 분리할 필요가 없다는 것이라는 생각이든다.
+
+뭔가 팀에서의 컨벤션이 제대로 이루어진 상태에서 로직분리를 적용하는 것이 많는 것 같다.
+
+가령 하나의 버튼에 로직이 들어간다면 (이러면 안되긴하지만) 굳이 분리를 시킬 필요도 없지 않을까 싶다.
+
+2. 로컬스테이트와 글로벌 스테이트가 하나의 함수에 합쳐져 동시에 동작을 해야할때
+
+사실 로컬스테이트를 굳이 hooks에 집어넣어야 싶은 생각도 든다.
+
+결국 비즈니스로직의 분리는 각 컴포넌트 or 페이지 마다 중복되는 로직의 최소화를 위해서인데 로컬 스테이트는 결국 그 로컬에서만 쓰일 용도니 말이다.
+
+그래서 생각한 방식은 일단은 리팩토링이니 hooks에 모두 집어넣고 중복되는 로직을 다른 hooks로 분리하여 글로벌하게 쓰일 수 있도록 변경한 뒤
+
+해당 페이지 또는 컴포넌트에 쓰여야하는 Hooks를 별도로 만들어 테스트하는 방식이 괜찮은 것 같다.
+
+2편은 testing-library/react-hooks를 통해서 테스트를 진행한 것을 포스팅 해보겠다!
 
 ## 참고
 
 - [How to Create a Three-Layer Application with React Hooks](https://medium.com/dailyjs/how-to-create-a-three-layer-application-with-react-hooks-2efba9ba345f)
-- 별도의 외부코드
