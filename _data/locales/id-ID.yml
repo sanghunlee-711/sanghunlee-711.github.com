@@ -11,10 +11,12 @@ layout:
 tabs:
   # format: <filename_without_extension>: <value>
   home: Beranda
+  about: Tentang
+  resume: Tentang
+  portfolio: Portfoilo
   categories: Kategori
   tags: Tagar
   archives: Arsip
-  about: Tentang
 
 # the text displayed in the search bar & search results
 search:
