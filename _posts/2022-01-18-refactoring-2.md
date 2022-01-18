@@ -1,7 +1,7 @@
 ---
 title: 리액트에서 비즈니스 로직을 나눠보자[2 - Hooks 를 테스트 해보자]
 author: Sanghun lee
-date: 2021-12-15 11:33:00 +0800
+date: 2021-01-18 11:33:00 +0800
 categories: [FE, React]
 tags: [Architecture]
 math: true
