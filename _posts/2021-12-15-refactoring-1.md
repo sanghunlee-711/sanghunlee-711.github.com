@@ -1,5 +1,5 @@
 ---
-title: 리액트에서 비즈니스 로직을 나눠보자[1 - 비즈니스 로직]
+title: 리액트에서 비즈니스 로직을 나눠보자[1 - 비즈니스로직 분리]
 author: Sanghun lee
 date: 2021-12-15 11:33:00 +0800
 categories: [FE, React]
@@ -22,7 +22,7 @@ image:
 
 마침 앵귤러로 진행된 다른 프로젝트를 조금씩 리액트로 포팅하는 와중이라 앵귤러의 구현 개념을 맛보고 즐기고 있었는데,
 
-Nest JS에서 했던 방식과 유사하게(역시 같은팀이 맞다. 공식문서 말대로 똑같음) Service와 View가 거의 나눠진 상태였고
+Nest JS에서 했던 방식과 유사하게(역시 같은팀이 맞다. 공식문서 말대로 똑같음) Service와 Controller가 나눠진 상태였고
 
 리액트에서도 이와 같은 방식은 아니더라도 로직과 뷰의 분리는 필요하다고 판단되었다.
 
@@ -66,6 +66,7 @@ Nest JS에서 했던 방식과 유사하게(역시 같은팀이 맞다. 공식�
 export default function FirstSection() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const storageToken = localStorage.getItem('access_token');
   const { authPhase, mainPopup, companyInfoData } = useRootState(
     (state) => state.global,
   );
@@ -73,8 +74,8 @@ export default function FirstSection() {
   const { corpName, charger, chargerTel, address, addressDetail } =
     companyInfoData;
 
-  const onApply = () => {
-    if (authPhase === 'logout' && !localStorage.getItem('access_token')) {
+  const onApply = (phase:phaseType, token:string) => {
+    if (phase === 'logout' && !token) {
       return dispatch(setIsLoginModalVisible(true));
     }
 
@@ -90,7 +91,7 @@ export default function FirstSection() {
   useEffect(() => {
     if (localStorage.getItem('isPaused') === 'true') {
       localStorage.removeItem('isPaused');
-      onApply();
+      onApply(authPhase, storageToken);
     }
   }, []);
 
@@ -109,10 +110,9 @@ export default function FirstSection() {
           <ABasicButton
           />
           <ABasicButton
-            onClick={onApply}
+            onClick={()=>onApply(authPhase, storageToken)}
           />
         </FirstSectionButtonWrapper>
-
     </>
   );
 }
@@ -141,7 +141,7 @@ props로 전달받은 함수만 작동하는것을 테스트하면 되기때문�
 export default function FirstSection() {
   const { actions, state } = usePersonnelManagementComponents();
   const {onApply} = actions;
-  const {authPhase} = state;
+  const {authPhase, storageToken} = state;
 
   return (
     <>
@@ -158,10 +158,9 @@ export default function FirstSection() {
           <ABasicButton
           />
           <ABasicButton
-            onClick={onApply}
+            onClick={()=>onApply(authPhase, storageToken)}
           />
         </FirstSectionButtonWrapper>
-
     </>
   );
 }
@@ -177,6 +176,8 @@ const usePersonnelManagementComponents = () => {
   const { authPhase, mainPopup, companyInfoData } = useRootState(
     (state) => state.global
   );
+  const storageToken = localStorage.getItem('access_token');
+
 
   const {
     address: addressPopup,
@@ -185,18 +186,18 @@ const usePersonnelManagementComponents = () => {
   } = MAIN_POPUP;
   const { basicInfoTitle, check, origin, path } = personnelManagement;
 
-  const onApply = () => {
-    if (authPhase === "logout" && !localStorage.getItem("access_token")) {
+  const onApply = (phase:phaseType, token:string) => {
+    if (phase === 'logout' && !token) {
       return dispatch(setIsLoginModalVisible(true));
     }
 
-    // 로그인이 되었으면
+  //When Logged In
     dispatch(
       checkBasicCompanyInfoAction({
         check: check as (keyof ICompanyInfo)[],
         domain: origin,
         path,
-      })
+      }),
     );
   };
 
@@ -210,6 +211,7 @@ const usePersonnelManagementComponents = () => {
   return {
     state: {
       mainPopup,
+      storageToken,
       ...
     },
     actions: {
