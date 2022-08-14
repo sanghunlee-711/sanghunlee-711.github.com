@@ -53,7 +53,23 @@ order: 1
 
  <hr>
 
-#### **디타임, FrontEnd developer, 2021.04~**
+#### **디타임, FrontEnd developer, 2022.02 ~**
+
+`React JS`,`Redux-toolkit`,`React-Query`,`Jest`,`Cypress`
+
+- UI-library 개발
+
+  - 실제 반납기기의 데이터 및 앱의 데이터의 내부직원 활용을 위한 백오피스 웹서비스 개발 및 운영
+  - 중복되는 UI 및 로직(Hooks, Context)의 재사용 및 디자이너와의 업무협력을 위한 <a href="https://www.npmjs.com/package/@oysterable_public/oysterable-ui">UI-Library</a> 및 <a href="http://15.164.231.190:83/?path=/story/complex-colors--page">Static-Website</a> 개발
+    - Storybook을 활용한 Static-Website 개발
+    - Rollup.js를 통한 번들링으로 기존 컴포넌트 및 Hooks를 번들링하여 NPM배포 진행 후 라이브러리로 활용
+
+- 오이스터에이블 백오피스 개발(앱 콘솔, 기기 콘솔)
+
+  - 프로젝트 세팅부터 개발까지 1인진행 및 유지보수 진행 중
+  - 기기 데이터를 가공하여 차트로 렌더링 등과 같은 다양한 UI작업 진행.
+
+#### **디타임, FrontEnd developer, 2021.04~ 2022.01**
 
 `React JS`,`Redux-toolkit`,`Redux-saga`,`Jest`,`Cypress`
 
@@ -76,14 +92,6 @@ order: 1
     - 각 페이지 폴더 내부에 Index, Saga, Slice(toolkit), Styles, Constant를 별도 구성하여 진행
     - 추가 개발 시 형성된 패턴에 따라 일관성 있는 코드구조를 통해 개발 및 유지보수 효율 상승
     - 패턴 변경과정 및 추가 리팩토링 과정에서 프로덕트 보장을 위한 Jest, Cypress 도입을 통해 개발 및 배포 시 제품 안정성 증대
-
-#### **다비수, Front-End developer, 2020.12~ 2021.03**
-
-`php`, `jquery`
-
-- 다비키즈
-
-  - 백오피스 개발 및 유지보수 진행
 
 #### **브랜디, Front-End Internship, 2020.09 ~ 2020.10**
 
