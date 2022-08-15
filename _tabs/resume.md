@@ -53,7 +53,7 @@ order: 1
 
  <hr>
 
-#### **디타임, FrontEnd developer, 2022.02 ~**
+#### **오이스터에이블, FrontEnd developer, 2022.02 ~**
 
 `React JS`,`Redux-toolkit`,`React-Query`,`Jest`,`Cypress`
 
